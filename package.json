@@ -1,5 +1,5 @@
 {
-  "name": "vue-event-calendar",
+  "name": "@mygooder/vue-event-calendar",
   "description": "A simple calendar to mark events for Vue2",
   "version": "1.5.2-0.0.1",
   "author": "Michel Tomas <michel@mygooder.com>",
