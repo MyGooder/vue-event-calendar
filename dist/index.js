@@ -83,13 +83,14 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = dateTimeFormatter;
 /* harmony export (immutable) */ __webpack_exports__["a"] = isEqualDateStr;
-function dateTimeFormatter(date, format) {
+function dateTimeFormatter(date, locale) {
+  var format = locale.format;
   // 时间格式化辅助函数 date:毫秒数 format:'yyyy-MM-dd hh:mm:ss'
-  if (!date || date == "") {
-    return "";
+  if (!date || date == '') {
+    return '';
   }
 
-  if (typeof date === "string") {
+  if (typeof date === 'string') {
     var mts = date.match(/(\/Date\((\d+)\)\/)/);
     if (mts && mts.length >= 3) {
       date = parseInt(mts[2]);
@@ -97,23 +98,26 @@ function dateTimeFormatter(date, format) {
   }
 
   date = new Date(date);
-  if (!date || date.toUTCString() == "Invalid Date") {
-    return "";
+  if (!date || date.toUTCString() == 'Invalid Date') {
+    return '';
   }
 
   var map = {
-    "M": date.getMonth() + 1, //月份
-    "d": date.getDate(), //日
-    "h": date.getHours(), //小时
-    "m": date.getMinutes(), //分
-    "s": date.getSeconds(), //秒
-    "q": Math.floor((date.getMonth() + 3) / 3), //季度
-    "S": date.getMilliseconds() //毫秒
+    M: date.getMonth() + 1, //月份
+    d: date.getDate(), //日
+    h: date.getHours(), //小时
+    m: date.getMinutes(), //分
+    s: date.getSeconds(), //秒
+    q: Math.floor((date.getMonth() + 3) / 3), //季度
+    S: date.getMilliseconds() //毫秒
   };
 
   format = format.replace(/([yMdhmsqS])+/g, function (all, t) {
     var v = map[t];
     if (v !== undefined) {
+      if (all === 'MMMM') {
+        return locale.monthNames[v];
+      }
       if (all.length > 1) {
         v = '0' + v;
         v = v.substr(v.length - 2);
@@ -617,7 +621,7 @@ var inBrowser = typeof window !== 'undefined';
     },
     curYearMonth: function curYearMonth() {
       var tempDate = Date.parse(new Date(this.calendar.params.curYear + '/' + (this.calendar.params.curMonth + 1) + '/01'));
-      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__tools_js__["b" /* dateTimeFormatter */])(tempDate, this.i18n[this.calendar.options.locale].format);
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__tools_js__["b" /* dateTimeFormatter */])(tempDate, this.i18n[this.calendar.options.locale]);
     },
     customColor: function customColor() {
       return this.calendar.options.color;

@@ -39,33 +39,37 @@
 
 <script>
 import i18n from '../i18n.js'
-import { dateTimeFormatter, isEqualDateStr} from '../tools.js'
+import { dateTimeFormatter, isEqualDateStr } from '../tools.js'
 
 const inBrowser = typeof window !== 'undefined'
 export default {
   name: 'cal-panel',
-  data () {
+  data() {
     return {
-      i18n
+      i18n,
     }
   },
   props: {
     events: {
       type: Array,
-      required: true
+      required: true,
     },
     calendar: {
       type: Object,
-      required: true
+      required: true,
     },
     selectedDay: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   computed: {
-    dayList () {
-      let firstDay = new Date(this.calendar.params.curYear, this.calendar.params.curMonth, 1)
+    dayList() {
+      let firstDay = new Date(
+        this.calendar.params.curYear,
+        this.calendar.params.curMonth,
+        1
+      )
       let dayOfWeek = firstDay.getDay()
       // 根据当前日期计算偏移量 // Calculate the offset based on the current date
       if (this.calendar.options.weekStartOn > dayOfWeek) {
@@ -77,58 +81,71 @@ export default {
       let startDate = new Date(firstDay)
       startDate.setDate(firstDay.getDate() - dayOfWeek)
 
-      let item, status, tempArr = [], tempItem
-      for (let i = 0 ; i < 42 ; i++) {
-          item = new Date(startDate);
-          item.setDate(startDate.getDate() + i);
+      let item,
+        status,
+        tempArr = [],
+        tempItem
+      for (let i = 0; i < 42; i++) {
+        item = new Date(startDate)
+        item.setDate(startDate.getDate() + i)
 
-          if (this.calendar.params.curMonth === item.getMonth()) {
-            status = 1
-          } else {
-            status = 0
+        if (this.calendar.params.curMonth === item.getMonth()) {
+          status = 1
+        } else {
+          status = 0
+        }
+        tempItem = {
+          date: `${item.getFullYear()}/${item.getMonth() +
+            1}/${item.getDate()}`,
+          status: status,
+          customClass: [],
+        }
+        this.events.forEach(event => {
+          if (isEqualDateStr(event.date, tempItem.date)) {
+            tempItem.title = event.title
+            tempItem.desc = event.desc || ''
+            if (event.customClass) tempItem.customClass.push(event.customClass)
           }
-          tempItem = {
-            date: `${item.getFullYear()}/${item.getMonth()+1}/${item.getDate()}`,
-            status: status,
-            customClass: []
-          }
-          this.events.forEach((event) => {
-            if (isEqualDateStr(event.date, tempItem.date)) {
-              tempItem.title = event.title
-              tempItem.desc = event.desc || ''
-              if (event.customClass) tempItem.customClass.push(event.customClass)
-            }
-          })
-          tempArr.push(tempItem)
+        })
+        tempArr.push(tempItem)
       }
       return tempArr
     },
-    today () {
+    today() {
       let dateObj = new Date()
-      return `${dateObj.getFullYear()}/${dateObj.getMonth()+1}/${dateObj.getDate()}`
+      return `${dateObj.getFullYear()}/${dateObj.getMonth() +
+        1}/${dateObj.getDate()}`
     },
-    curYearMonth () {
-      let tempDate = Date.parse(new Date(`${this.calendar.params.curYear}/${this.calendar.params.curMonth+1}/01`))
-      return dateTimeFormatter(tempDate, this.i18n[this.calendar.options.locale].format)
+    curYearMonth() {
+      let tempDate = Date.parse(
+        new Date(
+          `${this.calendar.params.curYear}/${this.calendar.params.curMonth +
+            1}/01`
+        )
+      )
+      return dateTimeFormatter(
+        tempDate,
+        this.i18n[this.calendar.options.locale]
+      )
     },
-    customColor () {
+    customColor() {
       return this.calendar.options.color
-    }
+    },
   },
   methods: {
-    nextMonth () {
+    nextMonth() {
       this.$EventCalendar.nextMonth()
       this.$emit('month-changed', this.curYearMonth)
     },
-    preMonth () {
+    preMonth() {
       this.$EventCalendar.preMonth()
       this.$emit('month-changed', this.curYearMonth)
     },
-    handleChangeCurday (date) {
+    handleChangeCurday(date) {
       if (date.status) {
         this.$emit('cur-day-changed', date.date)
       }
-    }
-  }
+    },
+  },
 }
 </script>
