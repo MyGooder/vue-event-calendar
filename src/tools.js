@@ -1,5 +1,5 @@
-export function dateTimeFormatter(date, locale) {
-  var format = locale.format
+export function dateTimeFormatter(date, locale, subKey) {
+  var format = subKey ? locale[subKey] : locale.format
   // 时间格式化辅助函数 date:毫秒数 format:'yyyy-MM-dd hh:mm:ss'
   if (!date || date == '') {
     return ''

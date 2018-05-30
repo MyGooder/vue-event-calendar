@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import { isEqualDateStr} from './tools.js'
+import { isEqualDateStr } from './tools.js'
 
 import calEvents from './components/cal-events.vue'
 import calPanel from './components/cal-panel.vue'
@@ -27,14 +27,14 @@ export default {
   name: 'vue-event-calendar',
   components: {
     'cal-events': calEvents,
-    'cal-panel': calPanel
+    'cal-panel': calPanel,
   },
-  data () {
+  data() {
     return {
       selectedDayEvents: {
         date: 'all',
-        events: this.events || []  //default show all event
-      }
+        events: this.events || [], //default show all event
+      },
     }
   },
   props: {
@@ -43,101 +43,105 @@ export default {
       type: Array,
       required: true,
       default: [],
-      validator (events) {
+      validator(events) {
         let validate = true
         events.forEach((event, index) => {
           if (!event.date) {
-            console.error('Vue-Event-Calendar-Error:' + 'Prop events Wrong at index ' + index)
+            console.error(
+              'Vue-Event-Calendar-Error:' +
+                'Prop events Wrong at index ' +
+                index
+            )
             validate = false
           }
         })
         return validate
-      }
-    }
+      },
+    },
   },
   computed: {
-    calendarOptions () {
+    calendarOptions() {
       let dateObj = new Date()
       if (inBrowser) {
-          return window.VueCalendarBarEventBus.CALENDAR_EVENTS_DATA
+        return window.VueCalendarBarEventBus.CALENDAR_EVENTS_DATA
       } else {
         return {
           options: {
             locale: 'en', //zh
-            color: ' #f29543'
+            color: ' #f29543',
           },
           params: {
-              curYear: dateObj.getFullYear(),
-              curMonth: dateObj.getMonth(),
-              curDate: dateObj.getDate(),
-              curEventsDate: 'all'
-          }
+            curYear: dateObj.getFullYear(),
+            curMonth: dateObj.getMonth(),
+            curDate: dateObj.getDate(),
+            curEventsDate: 'all',
+          },
         }
       }
     },
-    calendarParams () {
+    calendarParams() {
       let dateObj = new Date()
       if (inBrowser) {
-          return window.VueCalendarBarEventBus.CALENDAR_EVENTS_DATA.params
+        return window.VueCalendarBarEventBus.CALENDAR_EVENTS_DATA.params
       } else {
         return {
           curYear: dateObj.getFullYear(),
           curMonth: dateObj.getMonth(),
           curDate: dateObj.getDate(),
-          curEventsDate: 'all'
+          curEventsDate: 'all',
         }
       }
-    }
+    },
   },
-  created () {
+  created() {
     if (this.calendarParams.curEventsDate !== 'all') {
       this.handleChangeCurDay(this.calendarParams.curEventsDate)
     }
   },
   methods: {
-    handleChangeCurDay (date) {
+    handleChangeCurDay(date) {
       let events = this.events.filter(function(event) {
         return isEqualDateStr(event.date, date)
       })
       if (events.length > 0) {
         this.selectedDayEvents = {
           date: date,
-          events: events
+          events: events,
         }
       }
       this.$emit('day-changed', {
         date: date,
-        events: events
+        events: events,
       })
     },
-    handleMonthChanged (yearMonth) {
+    handleMonthChanged(yearMonth) {
       this.$emit('month-changed', yearMonth)
-    }
+    },
   },
   watch: {
-    calendarParams () {
+    calendarParams() {
       if (this.calendarParams.curEventsDate !== 'all') {
         let events = this.events.filter(event => {
           return isEqualDateStr(event.date, this.calendarParams.curEventsDate)
         })
         this.selectedDayEvents = {
           date: this.calendarParams.curEventsDate,
-          events
+          events,
         }
       } else {
         this.selectedDayEvents = {
           date: 'all',
-          events: this.events
+          events: this.events,
         }
       }
     },
-    events () {
+    events() {
       this.selectedDayEvents = {
         date: 'all',
-        events: this.events || []
+        events: this.events || [],
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="less">
@@ -150,17 +154,17 @@ export default {
 
 @icon-border-size: 1px;
 @media screen and (min-width: 768px) {
-  .__vev_calendar-wrapper{
+  .__vev_calendar-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    .cal-wrapper{
+    .cal-wrapper {
       width: 50%;
       padding: 100px 50px;
-      .date-num{
+      .date-num {
         line-height: 50px;
       }
     }
-    .events-wrapper{
+    .events-wrapper {
       width: 50%;
       background-color: @base-orange;
       color: @white;
@@ -173,42 +177,42 @@ export default {
   }
 }
 @media screen and (max-width: 767px) {
-  .__vev_calendar-wrapper{
-    .cal-wrapper{
+  .__vev_calendar-wrapper {
+    .cal-wrapper {
       width: 100%;
       padding: 10px 5px;
-      .date-num{
+      .date-num {
         line-height: 42px;
       }
     }
-    .events-wrapper{
+    .events-wrapper {
       width: 100%;
       margin-top: 10px;
       padding: 10px;
     }
   }
 }
-.__vev_calendar-wrapper{
+.__vev_calendar-wrapper {
   position: relative;
   overflow: hidden;
   width: 100%;
-  *{
+  * {
     box-sizing: border-box;
   }
-  ::-webkit-scrollbar{
+  ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
   }
   ::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background: rgba(0,0,0,.2);
+    background: rgba(0, 0, 0, 0.2);
   }
-  .cal-wrapper{
-    .cal-header{
+  .cal-wrapper {
+    .cal-header {
       position: relative;
       width: 100%;
       background-color: @white;
@@ -216,23 +220,23 @@ export default {
       font-weight: 500;
       overflow: hidden;
       padding-bottom: 10px;
-      &>div{
+      & > div {
         float: left;
         line-height: 20px;
         padding: @large-padding;
       }
-      .title{
+      .title {
         width: 60%;
         text-align: center;
       }
-      .l{
+      .l {
         text-align: left;
         width: 20%;
         cursor: pointer;
         user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       }
-      .r{
+      .r {
         text-align: right;
         width: 20%;
         cursor: pointer;
@@ -240,45 +244,45 @@ export default {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       }
     }
-    .cal-body{
+    .cal-body {
       width: 100%;
-      .weeks{
+      .weeks {
         width: 100%;
         overflow: hidden;
         text-align: center;
         font-size: 1rem;
-        .item{
+        .item {
           line-height: 50px;
           float: left;
           width: 14.285%;
         }
       }
-      .dates{
+      .dates {
         width: 100%;
         overflow: hidden;
         text-align: center;
         font-size: 1rem;
-        .item{
+        .item {
           position: relative;
           float: left;
           display: block;
           width: 14.285%;
           cursor: default;
           -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-          .date-num{
+          .date-num {
             font-size: 1rem;
             position: relative;
             z-index: 3;
           }
-          &.event{
+          &.event {
             cursor: pointer;
           }
-          &.selected-day{
-            .is-event{
+          &.selected-day {
+            .is-event {
               background-color: @base-orange;
             }
           }
-          .is-event{
+          .is-event {
             content: '';
             border: 1px solid @base-orange;
             background-color: #fff;
@@ -292,11 +296,11 @@ export default {
             margin-left: -18px;
             margin-top: -19px;
           }
-          .is-today{
+          .is-today {
             content: '';
             background-color: @base-orange;
             border-radius: 50%;
-            opacity: .8;
+            opacity: 0.8;
             width: 12px;
             height: 4px;
             position: absolute;
@@ -310,15 +314,15 @@ export default {
       }
     }
   }
-  .events-wrapper{
+  .events-wrapper {
     border-radius: 10px;
-    .cal-events{
+    .cal-events {
       height: 95%;
       overflow-y: auto;
       padding: 0 5px;
       margin: 15px 0;
     }
-    .date{
+    .date {
       max-width: 60%;
       min-width: 200px;
       text-align: center;
@@ -328,32 +332,32 @@ export default {
       margin: 0 auto;
       font-size: 22px;
     }
-    .event-item{
+    .event-item {
       padding: 5px 20px;
       margin-top: 15px;
-      box-shadow: 0 3px 11px 2px rgba(0,0,0,.1);
+      box-shadow: 0 3px 11px 2px rgba(0, 0, 0, 0.1);
       background-color: #fff;
       border-radius: 5px;
       color: #323232;
       position: relative;
-      &:first-child{
+      &:first-child {
         margin-top: 0;
       }
-      .title{
+      .title {
         height: 40px;
         line-height: 40px;
         color: #323232;
         font-size: 16px;
         border-bottom: 1px solid #f2f2f2;
       }
-      .time{
+      .time {
         position: absolute;
         right: 30px;
         top: 17px;
         color: #9b9b9b;
         font-size: 14px;
       }
-      .desc{
+      .desc {
         color: #9b9b9b;
         font-size: 14px;
         padding: 7px 0;
@@ -376,7 +380,7 @@ export default {
     border-top: solid @icon-border-size currentColor;
     border-right: solid @icon-border-size currentColor;
     -webkit-transform: rotate(-135deg);
-            transform: rotate(-135deg);
+    transform: rotate(-135deg);
   }
   .arrow-right.icon {
     color: #000;
@@ -394,12 +398,12 @@ export default {
     border-top: solid @icon-border-size currentColor;
     border-right: solid @icon-border-size currentColor;
     -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
+    transform: rotate(45deg);
   }
-  h3, p{
+  h3,
+  p {
     margin: 0;
     padding: 0;
   }
 }
-
 </style>

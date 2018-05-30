@@ -19,54 +19,57 @@ import { dateTimeFormatter } from '../tools.js'
 import calEventItem from './cal-event-item.vue'
 export default {
   name: 'cal-events',
-  data () {
+  data() {
     return {
-      i18n
+      i18n,
     }
   },
   components: {
-    'cal-event-item': calEventItem
+    'cal-event-item': calEventItem,
   },
   props: {
     title: String,
     dayEvents: {
       type: Object,
-      required: true
+      required: true,
     },
     locale: {
       type: String,
-      required: true
+      required: true,
     },
     color: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    dayEventsTitle () {
+    dayEventsTitle() {
       if (this.title) return this.title
       if (this.dayEvents.date !== 'all') {
         let tempDate
         if (this.dayEvents.events.length !== 0) {
           tempDate = Date.parse(new Date(this.dayEvents.events[0].date))
-          return dateTimeFormatter(tempDate, i18n[this.locale].fullFormat)
+          return dateTimeFormatter(tempDate, i18n[this.locale], 'fullFormat')
         } else {
-          tempDate = dateTimeFormatter(Date.parse(new Date(this.dayEvents.date)), i18n[this.locale].fullFormat)
+          tempDate = dateTimeFormatter(
+            Date.parse(new Date(this.dayEvents.date)),
+            i18n[this.locale].fullFormat
+          )
           return `${tempDate} ${i18n[this.locale].notHaveEvents}`
         }
       } else {
         return i18n[this.locale].dayEventsTitle
       }
     },
-    events () {
+    events() {
       return this.dayEvents.events
     },
-    bgColor () {
-      return {backgroundColor: this.color}
-    }
+    bgColor() {
+      return { backgroundColor: this.color }
+    },
   },
   methods: {
-    dateTimeFormatter
-  }
+    dateTimeFormatter,
+  },
 }
 </script>
