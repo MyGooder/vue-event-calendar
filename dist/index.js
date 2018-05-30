@@ -83,8 +83,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = dateTimeFormatter;
 /* harmony export (immutable) */ __webpack_exports__["a"] = isEqualDateStr;
-function dateTimeFormatter(date, locale) {
-  var format = locale.format;
+function dateTimeFormatter(date, locale, subKey) {
+  var format = subKey ? locale[subKey] : locale.format;
   // 时间格式化辅助函数 date:毫秒数 format:'yyyy-MM-dd hh:mm:ss'
   if (!date || date == '') {
     return '';
@@ -477,7 +477,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var tempDate = void 0;
         if (this.dayEvents.events.length !== 0) {
           tempDate = Date.parse(new Date(this.dayEvents.events[0].date));
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__tools_js__["b" /* dateTimeFormatter */])(tempDate, __WEBPACK_IMPORTED_MODULE_0__i18n_js__["a" /* default */][this.locale].fullFormat);
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__tools_js__["b" /* dateTimeFormatter */])(tempDate, __WEBPACK_IMPORTED_MODULE_0__i18n_js__["a" /* default */][this.locale], 'fullFormat');
         } else {
           tempDate = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__tools_js__["b" /* dateTimeFormatter */])(Date.parse(new Date(this.dayEvents.date)), __WEBPACK_IMPORTED_MODULE_0__i18n_js__["a" /* default */][this.locale].fullFormat);
           return tempDate + ' ' + __WEBPACK_IMPORTED_MODULE_0__i18n_js__["a" /* default */][this.locale].notHaveEvents;
@@ -975,7 +975,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "title"
   }, [_vm._v(_vm._s(_vm.index + 1) + ". " + _vm._s(_vm.event.title))]), _vm._v(" "), _c('p', {
     staticClass: "time"
-  }, [_vm._v(_vm._s(_vm.dateTimeFormatter(Date.parse(new Date(_vm.event.date)), _vm.i18n[_vm.locale].fullFormat)))]), _vm._v(" "), _c('p', {
+  }, [_vm._v(_vm._s(_vm.dateTimeFormatter(Date.parse(new Date(_vm.event.date)), _vm.i18n[_vm.locale], 'fullFormat')))]), _vm._v(" "), _c('p', {
     staticClass: "desc"
   }, [_vm._v(_vm._s(_vm.event.desc))])])
 },staticRenderFns: []}
