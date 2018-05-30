@@ -116,7 +116,7 @@ function dateTimeFormatter(date, locale, subKey) {
     var v = map[t];
     if (v !== undefined) {
       if (all === 'MMMM') {
-        return locale.monthNames[v];
+        return locale.monthNames[v - 1];
       }
       if (all.length > 1) {
         v = '0' + v;
